@@ -33,7 +33,11 @@ jobs:
       - name: Build
         env:
           VITE_MAPBOX_API_KEY: ${{ secrets.VITE_MAPBOX_API_KEY }}
+          NODE_ENV: production
         run: npm run build
+
+      - name: Add .nojekyll file
+        run: touch dist/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
