@@ -32,3 +32,21 @@ html {
   margin-right: 8px;
   opacity: 0.9;
 }
+
+.title {
+  background-color: rgba(15, 32, 39, 0.9);
+  padding: 15px 20px;
+  color: rgb(228, 238, 226);
+}
+
+.title h2 {
+  margin: 0 0 5px 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.title p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.8;
+}

@@ -46,22 +46,17 @@ function createFeatures(earthquakeData) {
   }
 
   function getColor(magnitude) {
-    switch (true) {
-      case magnitude > 6:
-        return "#de2c1fff";
-      case magnitude > 5:
-        return "#e9db12ff";
-      case magnitude > 4:
-        return "#7ee815ff";
-      case magnitude > 3:
-        return "#18e3a0ff";
-      case magnitude > 2:
-        return "#185bd8ff";
-      case magnitude > 1:
-        return "#541edeff";
-      default:
-        return "#131314ff";
-    }
+    const colorScale = [
+      { threshold: 6, color: "#de2c1fff" },
+      { threshold: 5, color: "#e9db12ff" },
+      { threshold: 4, color: "#7ee815ff" },
+      { threshold: 3, color: "#18e3a0ff" },
+      { threshold: 2, color: "#185bd8ff" },
+      { threshold: 1, color: "#541edeff" },
+      { threshold: 0, color: "#131314ff" }
+    ];
+
+    return colorScale.find(scale => magnitude > scale.threshold)?.color || "#131314ff";
   }
 
 
@@ -134,13 +129,31 @@ function createMap(earthquakes) {
   var lvMap = L.map("map", {
     center: [36.17, -115.14],
     zoom: 5,
-    layers: [darkmap, quakes, earthquakes]
+    layers: [darkmap, quakes, earthquakes],
+    zoomControl: false
   });
+
+  L.control.zoom({
+    position: 'bottomleft'
+  }).addTo(lvMap)
 
 
   L.control.layers(baseMaps, overlayMaps, {
-    collapsed: false
+    collapsed: true
   }).addTo(lvMap);
+
+  // --------------------------------------
+  // Title Banner
+  // --------------------------------------
+  const title = L.control({ position: "topleft" });
+
+  title.onAdd = function (map) {
+    const div = L.DomUtil.create('div', 'info title');
+    div.innerHTML = '<h2>Global Earthquake Activity</h2><p>Real-time data from USGS</p>';
+    return div;
+  };
+
+  title.addTo(lvMap);
 
   // --------------------------------------
   // Legend
