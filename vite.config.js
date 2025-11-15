@@ -10,8 +10,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // - resolve.alias: maps /src to the actual src directory for imports
 // - cacheDir: moved to system temp to avoid OneDrive/AV file locks
 export default defineConfig(({ command, mode }) => ({
-  // Always use '/' as base - GitHub Actions deployment serves at repo path automatically
-  base: '/',
+  // Use '/' for local dev/preview, '/global-geoactivity-tracker/' for GitHub Pages
+  base: mode === 'production' ? '/global-geoactivity-tracker/' : '/',
   resolve: {
     alias: {
       '/src': path.resolve(__dirname, 'src')

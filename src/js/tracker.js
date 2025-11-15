@@ -1,4 +1,5 @@
 import { API_KEY, TILE_LAYER_URL, TILE_ATTRIBUTION } from '/src/config/config.js';
+import '/src/css/style.css';
 
 // --------------------------------------
 // Ingestion
