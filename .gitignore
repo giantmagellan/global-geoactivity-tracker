@@ -5,9 +5,8 @@ node_modules/
 /dist/
 /.vite/
 
-# Env files (never commit secrets)
+# Env files
 .env
-.env.*
 
 # Logs
 npm-debug.log*

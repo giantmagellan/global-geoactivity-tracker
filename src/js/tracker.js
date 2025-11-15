@@ -4,7 +4,7 @@ import { API_KEY, TILE_LAYER_URL, TILE_ATTRIBUTION } from '/src/config/config.js
 // Ingestion
 // --------------------------------------
 
-// earthquake json url
+// USGS earthquake url
 const url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
 
 // Performs GET request to the query URL using modern fetch
