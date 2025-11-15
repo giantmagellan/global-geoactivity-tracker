@@ -41,10 +41,11 @@ VITE_MAPBOX_API_KEY=your_key_here
 ## File Structure
 
 ```
-├── .env                    # API keys (not committed)
+├── .env                   # API keys (not committed)
 ├── .env.example           # Template for environment variables
 ├── src/
-│   └── config.js          # Imports API key from .env
+|   └── config/
+│       └── config.js      # Imports API key from .env
 ├── static/
 │   ├── css/
 │   │   └── style.css

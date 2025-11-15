@@ -148,20 +148,15 @@ function createMap(earthquakes) {
   var legend = L.control({ position: "bottomright" });
 
   legend.onAdd = function (lvmap) {
-    var div = L.DomUtil.create('div', 'info legend')
-    grades = [0, 1, 2, 3, 4, 5, 6]
+    const div = L.DomUtil.create('div', 'info legend');
 
-    div.innerHTML += '<i style="background: #131314ff"></i><span>0-1</span><br>';
+    div.innerHTML = '<i style="background: #131314ff"></i><span>0-1</span><br>';
     div.innerHTML += '<i style="background: #541edeff"></i><span>1-2</span><br>';
     div.innerHTML += '<i style="background: #185bd8ff"></i><span>2-3</span><br>';
     div.innerHTML += '<i style="background: #18e3a0ff"></i><span>3-4</span><br>';
     div.innerHTML += '<i style="background: #7ee815ff"></i><span>4-5</span><br>';
     div.innerHTML += '<i style="background: #e9db12ff"></i><span>5-6</span><br>';
     div.innerHTML += '<i style="background: #de2c1fff"></i><span>6+</span><br>';
-
-    // for (var i = 0; i < grades.length; i++) {
-    //   div.innerHTML += ‘<i style=”background:’ + getColor(grades[i] + 1) + ‘”></i> ‘ + grades[i] + (grades[i + 1] ? ‘&ndash;’ + grades[i + 1] + ‘<br>’ : ‘+’);
-    //   }
 
 
     return div;
