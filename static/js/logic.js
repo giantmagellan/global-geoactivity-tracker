@@ -91,19 +91,25 @@ var quakeMarkers = [];
 // --------------------------------------
 function createMap(earthquakes) {
 
+  const tileSize = 512
+  const zoomOffset = -1
+  const maxZoom = 18
+
   // Helper function to create tile layers
-  const createTileLayer = (mapboxId) => {
+  const createTileLayer = (styleId) => {
     return L.tileLayer(TILE_LAYER_URL, {
       attribution: TILE_ATTRIBUTION,
-      maxZoom: 18,
-      id: mapboxId,
+      tileSize: tileSize,
+      zoomOffset: zoomOffset,
+      maxZoom: maxZoom,
+      id: styleId,
       accessToken: API_KEY
     });
   };
 
-  const darkmap = createTileLayer("mapbox.dark");
-  const outdoors = createTileLayer("mapbox.outdoors");
-  const satellite = createTileLayer("mapbox.satellite");
+  const darkmap = createTileLayer("mapbox/dark-v11");
+  const outdoors = createTileLayer("mapbox/outdoors-v12");
+  const satellite = createTileLayer("mapbox/satellite-streets-v12");
 
   // --------------------------------------
   // Layers, Basemaps, and Overlay Objects
