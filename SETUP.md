@@ -46,10 +46,9 @@ VITE_MAPBOX_API_KEY=your_key_here
 ├── src/
 |   └── config/
 │       └── config.js      # Imports API key from .env
-├── static/
 │   ├── css/
 │   │   └── style.css
 │   └── js/
-│       └── logic.js       # Main application logic
+│       └── tracker.js       # Main application tracker
 └── index.html             # Entry point
 ```

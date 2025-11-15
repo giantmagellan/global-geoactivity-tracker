@@ -1,10 +1,10 @@
 import { API_KEY, TILE_LAYER_URL, TILE_ATTRIBUTION } from '/src/config/config.js';
 
 // --------------------------------------
-// Import data into JS
+// Ingestion
 // --------------------------------------
 
-// earthquake json url
+// USGS earthquake url
 const url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
 
 // Performs GET request to the query URL using modern fetch
@@ -113,11 +113,9 @@ function createMap(earthquakes) {
 
   // BaseMaps object to hold base layer
   var baseMaps = {
-    // "Street Map": streetmap,
     "Dark Map": darkmap,
     "Outdoors": outdoors,
     "Satellite": satellite
-    // "Grayscale": grayscale
   };
 
   // Overlay object to hold overlay layer
