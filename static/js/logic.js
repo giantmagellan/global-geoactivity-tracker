@@ -1,15 +1,24 @@
+import { API_KEY } from 'src/config.js';
+
 // --------------------------------------
 // Import data into JS
 // --------------------------------------
 
 // earthquake json url
-url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
+const url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
 
-// Performs GET request to the query URL
-d3.json(url, function(data) {
-    // Sends data.features object to the createFeatures function
+// Performs GET request to the query URL using modern fetch
+async function loadEarthquakeData() {
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
     createFeatures(data.features);
-  });
+  } catch (error) {
+    console.error('Error loading earthquake data:', error);
+  }
+}
+
+loadEarthquakeData();
 
 // --------------------------------------
 // Features and Popups for Earthquakes
@@ -31,37 +40,39 @@ function createFeatures(earthquakeData) {
       fillColor: getColor(geoJsonFeature.properties.mag),
       color: "royalblue",
       weight: 1.5,
-      fillOpacity: .25, 
+      fillOpacity: .25,
       radius: markerSize(geoJsonFeature.properties.mag / 1.5)
     }
   }
 
   function getColor(magnitude) {
-    switch(true) {
+    switch (true) {
+      case magnitude > 6:
+        return "#de2c1fff"
       case magnitude > 5:
-        return "#12c2e9";
+        return "#e9db12ff";
       case magnitude > 4:
-        return "#c471ed";
+        return "#7ee815ff";
       case magnitude > 3:
-        return "#f64f59";
+        return "#18e3a0ff";
       case magnitude > 2:
-        return "#b92b27";
+        return "#185bd8ff";
       case magnitude > 1:
-        return "#1565C0";
+        return "#541edeff";
       default:
-        return "#373B44";
+        return "#131314ff";
     }
   }
-  
+
 
   var earthquakes = L.geoJSON(earthquakeData, {
-      onEachFeature: onEachFeature,
-      pointToLayer: pointToLayer,
-      style: style
-    });
-  
-    // Sends earthquakes layer to createMap function
-    createMap(earthquakes);
+    onEachFeature: onEachFeature,
+    pointToLayer: pointToLayer,
+    style: style
+  });
+
+  // Sends earthquakes layer to createMap function
+  createMap(earthquakes);
 }
 
 // --------------------------------------
@@ -81,24 +92,24 @@ var quakeMarkers = [];
 function createMap(earthquakes) {
 
   var darkmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-  attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-  maxZoom: 18,
-  id: "mapbox.dark",
-  accessToken: API_KEY
+    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+    maxZoom: 18,
+    id: "mapbox.dark",
+    accessToken: API_KEY
   });
 
   var outdoors = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-  attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-  maxZoom: 18,
-  id: "mapbox.outdoors",
-  accessToken: API_KEY
+    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+    maxZoom: 18,
+    id: "mapbox.outdoors",
+    accessToken: API_KEY
   });
 
   var satellite = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-  attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-  maxZoom: 18,
-  id: "mapbox.satellite",
-  accessToken: API_KEY
+    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+    maxZoom: 18,
+    id: "mapbox.satellite",
+    accessToken: API_KEY
   });
 
   // --------------------------------------
@@ -122,36 +133,37 @@ function createMap(earthquakes) {
 
   // Inital map object with central coordinates at Las Vegas, NV
   var lvMap = L.map("map", {
-      center: [36.17, -115.14],
-      zoom: 5,
-      layers: [darkmap, quakes, earthquakes]
-    });
+    center: [36.17, -115.14],
+    zoom: 5,
+    layers: [darkmap, quakes, earthquakes]
+  });
 
 
   L.control.layers(baseMaps, overlayMaps, {
-      collapsed: false
-    }).addTo(lvMap);
+    collapsed: false
+  }).addTo(lvMap);
 
   // --------------------------------------
   // Legend
   // --------------------------------------
-  var legend = L.control({position: "bottomright"});
-  
-  legend.onAdd = function(lvmap) {
+  var legend = L.control({ position: "bottomright" });
+
+  legend.onAdd = function (lvmap) {
     var div = L.DomUtil.create('div', 'info legend')
-    grades = [0, 1, 2, 3, 4, 5]
-    
-    div.innerHTML += '<i style="background: #373B44"></i><span>0-1</span><br>';
-    div.innerHTML += '<i style="background: #1565C0"></i><span>1-2</span><br>';
-    div.innerHTML += '<i style="background: #b92b27"></i><span>2-3</span><br>';
-    div.innerHTML += '<i style="background: #f64f59"></i><span>3-4</span><br>';
-    div.innerHTML += '<i style="background: #c471ed"></i><span>4-5</span><br>';
-    div.innerHTML += '<i style="background: #12c2e9"></i><span>5-6</span><br>';
+    grades = [0, 1, 2, 3, 4, 5, 6]
+
+    div.innerHTML += '<i style="background: #131314ff"></i><span>0-1</span><br>';
+    div.innerHTML += '<i style="background: #541edeff"></i><span>1-2</span><br>';
+    div.innerHTML += '<i style="background: #185bd8ff"></i><span>2-3</span><br>';
+    div.innerHTML += '<i style="background: #18e3a0ff"></i><span>3-4</span><br>';
+    div.innerHTML += '<i style="background: #7ee815ff"></i><span>4-5</span><br>';
+    div.innerHTML += '<i style="background: #e9db12ff"></i><span>5-6</span><br>';
+    div.innerHTML += '<i style="background: #de2c1fff"></i><span>6+</span><br>';
 
     // for (var i = 0; i < grades.length; i++) {
     //   div.innerHTML += ‘<i style=”background:’ + getColor(grades[i] + 1) + ‘”></i> ‘ + grades[i] + (grades[i + 1] ? ‘&ndash;’ + grades[i + 1] + ‘<br>’ : ‘+’);
     //   }
-    
+
 
     return div;
   };

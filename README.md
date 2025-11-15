@@ -1,3 +1,3 @@
-# leaflet-challenge
+# Global Geoactivity Tracker
 
-https://giantmagellan.github.io/DailyEarthquakeUpdate/
+https://giantmagellan.github.io/global-geoactivity-tracker/

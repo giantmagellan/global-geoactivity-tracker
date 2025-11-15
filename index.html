@@ -1,35 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Leaflet Step-1</title>
+  <title>Global Geoactivity Tracker</title>
 
   <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
   <!-- Our CSS -->
   <link rel="stylesheet" type="text/css" href="static/css/style.css">
-  <!-- Mapbox CSS -->
-  <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
-
 </head>
+
 <body>
 
   <!-- The div that holds our map -->
   <div id="map"></div>
 
   <!-- Leaflet JavaScript -->
-  <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
-  <!-- D3 JavaScript -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.3/d3.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
   <!-- Our JavaScript -->
-  <script type="text/javascript" src="static/js/logic.js"></script>
-  <!-- API KEY-->
-  <script type="text/javascript" src="static/js/config.js"></script>
-  <!-- GL JS -->
-  <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
-  
+  <script type="module" src="/static/js/logic.js"></script>
+
 </body>
+
 </html>
