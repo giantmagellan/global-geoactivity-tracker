@@ -1,21 +1,33 @@
 import { API_KEY, TILE_LAYER_URL, TILE_ATTRIBUTION } from '/src/config/config.js';
+import { EarthquakeService } from '/src/services/EarthquakeService.js';
+import { WeatherService } from '/src/services/WeatherService.js';
+import { onEachFeature, pointToLayer, style, tsunamiStyle } from '/src/utils/earthquakeHelpers.js';
+import { onEachWeatherFeature, weatherAlertStyle } from '/src/utils/weatherHelpers.js';
 import '/src/css/style.css';
 
 // --------------------------------------
 // Ingestion
 // --------------------------------------
 
-// USGS earthquake url
-const url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
+const earthquakeService = new EarthquakeService();
+const weatherService = new WeatherService();
 
-// Performs GET request to the query URL using modern fetch
 async function loadEarthquakeData() {
   try {
-    const response = await fetch(url);
-    const data = await response.json();
-    createFeatures(data.features);
+    const features = await earthquakeService.fetchEarthquakeData();
+    createFeatures(features);
   } catch (error) {
     console.error('Error loading earthquake data:', error);
+  }
+}
+
+async function loadWeatherAlerts() {
+  try {
+    const features = await weatherService.fetchActiveAlerts();
+    return features;
+  } catch (error) {
+    console.error('Error loading weather alert data:', error);
+    return [];
   }
 }
 
@@ -24,59 +36,34 @@ loadEarthquakeData();
 // --------------------------------------
 // Features and Popups for Earthquakes
 // --------------------------------------
-function createFeatures(earthquakeData) {
-
-  function onEachFeature(feature, layer) {
-    layer.bindPopup("<h3>" + feature.properties.place +
-      "</h3><hr><p>" + new Date(feature.properties.time) + "</p>" +
-      "<p>" + "Magnitude" + " " + feature.properties.mag + "</p>");
-  }
-
-  function pointToLayer(geoJsonPoint, latlng) {
-    return L.circleMarker(latlng);
-  }
-
-  function style(geoJsonFeature) {
-    return {
-      fillColor: getColor(geoJsonFeature.properties.mag),
-      color: "royalblue",
-      weight: 1.5,
-      fillOpacity: .25,
-      radius: markerSize(geoJsonFeature.properties.mag / 1.5)
-    }
-  }
-
-  function getColor(magnitude) {
-    const colorScale = [
-      { threshold: 6, color: "#de2c1fff" },
-      { threshold: 5, color: "#e9db12ff" },
-      { threshold: 4, color: "#7ee815ff" },
-      { threshold: 3, color: "#18e3a0ff" },
-      { threshold: 2, color: "#185bd8ff" },
-      { threshold: 1, color: "#541edeff" },
-      { threshold: 0, color: "#131314ff" }
-    ];
-
-    return colorScale.find(scale => magnitude > scale.threshold)?.color || "#131314ff";
-  }
-
-
+async function createFeatures(earthquakeData) {
   var earthquakes = L.geoJSON(earthquakeData, {
     onEachFeature: onEachFeature,
     pointToLayer: pointToLayer,
     style: style
   });
 
-  // Sends earthquakes layer to createMap function
-  createMap(earthquakes);
-}
+  // Tsunami warnings layer
+  var tsunamiEarthquakes = L.geoJSON(earthquakeData, {
+    filter: function (feature) {
+      return feature.properties.tsunami === 1;
+    },
+    onEachFeature: onEachFeature,
+    pointToLayer: pointToLayer,
+    style: tsunamiStyle
+  });
 
-// --------------------------------------
-// Circles with varied radii
-// --------------------------------------
+  // Weather alerts layer
+  const weatherData = await loadWeatherAlerts();
+  // Filter for alerts with valid geometry
+  const weatherDataWithGeometry = weatherData.filter(feature => feature.geometry !== null);
+  var weatherAlerts = L.geoJSON(weatherDataWithGeometry, {
+    onEachFeature: onEachWeatherFeature,
+    style: weatherAlertStyle
+  });
 
-function markerSize(earthquakeData) {
-  return earthquakeData * 12;
+  // Pass all layers to createMap
+  createMap(earthquakes, tsunamiEarthquakes, weatherAlerts);
 }
 
 // Arrays to hold created markers
@@ -85,7 +72,7 @@ var quakeMarkers = [];
 // --------------------------------------
 // Function to create earthquake map
 // --------------------------------------
-function createMap(earthquakes) {
+function createMap(earthquakes, tsunamiEarthquakes, weatherAlerts) {
 
   const tileSize = 512
   const zoomOffset = -1
@@ -121,7 +108,9 @@ function createMap(earthquakes) {
 
   // Overlay object to hold overlay layer
   var overlayMaps = {
-    Earthquakes: earthquakes
+    "Earthquakes": earthquakes,
+    "Tsunami Warnings": tsunamiEarthquakes,
+    "Weather Alerts": weatherAlerts
   };
 
   // Inital map object with central coordinates at Las Vegas, NV
@@ -137,7 +126,7 @@ function createMap(earthquakes) {
   }).addTo(lvMap)
 
 
-  L.control.layers(baseMaps, overlayMaps, {
+  const layerControl = L.control.layers(baseMaps, overlayMaps, {
     collapsed: true
   }).addTo(lvMap);
 
@@ -148,7 +137,7 @@ function createMap(earthquakes) {
 
   title.onAdd = function (map) {
     const div = L.DomUtil.create('div', 'info title');
-    div.innerHTML = '<h2>Global Earthquake Activity</h2><p>Real-time data from USGS</p>';
+    div.innerHTML = '<h2>Global Geographic Activity</h2><p>Real-time data from USGS</p>';
     return div;
   };
 
@@ -162,17 +151,31 @@ function createMap(earthquakes) {
   legend.onAdd = function (lvmap) {
     const div = L.DomUtil.create('div', 'info legend');
 
-    div.innerHTML = '<i style="background: #131314ff"></i><span>0-1</span><br>';
-    div.innerHTML += '<i style="background: #541edeff"></i><span>1-2</span><br>';
-    div.innerHTML += '<i style="background: #185bd8ff"></i><span>2-3</span><br>';
-    div.innerHTML += '<i style="background: #18e3a0ff"></i><span>3-4</span><br>';
-    div.innerHTML += '<i style="background: #7ee815ff"></i><span>4-5</span><br>';
-    div.innerHTML += '<i style="background: #e9db12ff"></i><span>5-6</span><br>';
-    div.innerHTML += '<i style="background: #de2c1fff"></i><span>6+</span><br>';
-
+    div.innerHTML = '<h3>Earthquake Severity</h3>';
+    div.innerHTML += '<i style="background: #12c2e9"></i><span>Minor (&lt;2.5)</span><br>';
+    div.innerHTML += '<i style="background: #40E0D0"></i><span>Light (2.5-3.9)</span><br>';
+    div.innerHTML += '<i style="background: #6b99eb"></i><span>Moderate (4.0-5.4)</span><br>';
+    div.innerHTML += '<i style="background: #c471ed"></i><span>Strong (5.5-6.9)</span><br>';
+    div.innerHTML += '<i style="background: #e560a3"></i><span>Major (7.0-7.9)</span><br>';
+    div.innerHTML += '<i style="background: #f64f59"></i><span>Great (8.0+)</span><br>';
 
     return div;
   };
 
   legend.addTo(lvMap);
+
+  // --------------------------------------
+  // Toggle Legend with Earthquake Layer
+  // --------------------------------------
+  lvMap.on('overlayadd', function(eventLayer) {
+    if (eventLayer.name === 'Earthquakes') {
+      lvMap.addControl(legend);
+    }
+  });
+
+  lvMap.on('overlayremove', function(eventLayer) {
+    if (eventLayer.name === 'Earthquakes') {
+      lvMap.removeControl(legend);
+    }
+  });
 }
