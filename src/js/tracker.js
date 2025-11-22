@@ -1,7 +1,7 @@
 import { API_KEY, TILE_LAYER_URL, TILE_ATTRIBUTION } from '/src/config/config.js';
 import { EarthquakeService } from '/src/services/EarthquakeService.js';
 import { WeatherService } from '/src/services/WeatherService.js';
-import { onEachFeature, pointToLayer, style, tsunamiStyle } from '/src/utils/earthquakeHelpers.js';
+import { onEachFeature, pointToLayer, style, tsunamiStyle, getColor } from '/src/utils/earthquakeHelpers.js';
 import { onEachWeatherFeature, weatherAlertStyle } from '/src/utils/weatherHelpers.js';
 import '/src/css/style.css';
 
@@ -152,12 +152,12 @@ function createMap(earthquakes, tsunamiEarthquakes, weatherAlerts) {
     const div = L.DomUtil.create('div', 'info legend');
 
     div.innerHTML = '<h3>Earthquake Severity</h3>';
-    div.innerHTML += '<i style="background: #12c2e9"></i><span>Minor (&lt;2.5)</span><br>';
-    div.innerHTML += '<i style="background: #40E0D0"></i><span>Light (2.5-3.9)</span><br>';
-    div.innerHTML += '<i style="background: #6b99eb"></i><span>Moderate (4.0-5.4)</span><br>';
-    div.innerHTML += '<i style="background: #c471ed"></i><span>Strong (5.5-6.9)</span><br>';
-    div.innerHTML += '<i style="background: #e560a3"></i><span>Major (7.0-7.9)</span><br>';
-    div.innerHTML += '<i style="background: #f64f59"></i><span>Great (8.0+)</span><br>';
+    div.innerHTML += '<i style="background: #541edeff"></i><span>Minor (&lt;2.5)</span><br>';
+    div.innerHTML += '<i style="background: #185bd8ff"></i><span>Light (2.5-3.9)</span><br>';
+    div.innerHTML += '<i style="background: #40E0D0"></i><span>Moderate (4.0-5.4)</span><br>';
+    div.innerHTML += '<i style="background: #7ee815ff"></i><span>Strong (5.5-6.9)</span><br>';
+    div.innerHTML += '<i style="background: #e9db12ff"></i><span>Major (7.0-7.9)</span><br>';
+    div.innerHTML += '<i style="background: #de2c1fff"></i><span>Great (8.0+)</span><br>';
 
     return div;
   };

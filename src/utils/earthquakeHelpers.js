@@ -76,7 +76,7 @@ export function getAlertStyle(alert) {
     'green': { color: '#00ff00', weight: 3 }
   };
 
-  return alertLevels[alert] || { color: '#808080', weight: 1 };
+  return alertLevels[alert] || { color: '#0b0b0bff', weight: 1 };
 }
 
 // --------------------------------------
@@ -85,12 +85,12 @@ export function getAlertStyle(alert) {
 
 export function getColor(magnitude) {
   const colorScale = [
-    { threshold: 8.0, color: "#f64f59" },  // Great: Red-Pink
-    { threshold: 7.0, color: "#e560a3" },  // Major: Pink-Purple
-    { threshold: 5.5, color: "#c471ed" },  // Strong: Purple
-    { threshold: 4.0, color: "#6b99eb" },  // Moderate: Blue-Purple
-    { threshold: 2.5, color: "#40E0D0" },  // Light: Green Sherbert
-    { threshold: 0, color: "#12c2e9" }     // Minor: Cyan
+    { threshold: 8.0, color: "#de2c1fff" }, // Great: Red
+    { threshold: 7.0, color: "#e9db12ff" },  // Major: Yellow
+    { threshold: 5.5, color: "#7ee815ff" },  // Strong: Bright Green
+    { threshold: 4.0, color: "#40E0D0" },    // Moderate: Green Sherbert
+    { threshold: 2.5, color: "#185bd8ff" },  // Light: Midnight Blue
+    { threshold: 0, color: "#541edeff" }     // Minor: Dark Purple
   ];
 
   return colorScale.find(scale => magnitude >= scale.threshold)?.color || "#12c2e9";
