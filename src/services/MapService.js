@@ -1,4 +1,9 @@
-import { API_KEY, TILE_LAYER_URL, TILE_ATTRIBUTION } from '/src/config/config.js';
+import {
+  API_KEY,
+  TILE_LAYER_URL,
+  TILE_ATTRIBUTION,
+  TRAFFIC_V1_TILE_LAYER_URL
+} from '/src/config/config.js';
 
 // --------------------------------------
 // Map Configuration Constants
@@ -7,7 +12,7 @@ const MAP_CONFIG = {
   tileSize: 512,
   zoomOffset: -1,
   maxZoom: 18,
-  defaultCenter: [32.7157, -117.1611], // Las Vegas, NV
+  defaultCenter: [32.7157, -117.1611], // San Diego, CA
   defaultZoom: 9
 };
 

@@ -136,3 +136,187 @@ html {
   display: inline-block;
   line-height: 18px;
 }
+
+/* Route Instructions Panel */
+.route-instructions {
+  background-color: rgba(15, 32, 39, 0.95);
+  color: rgb(228, 238, 226);
+  padding: 15px;
+  border-radius: 5px;
+  max-width: 350px;
+  max-height: 400px;
+  overflow-y: auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  margin-top: 10px;
+}
+
+.route-instructions h3 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  border-bottom: 2px solid #00ff00;
+  padding-bottom: 8px;
+}
+
+.instructions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.instruction-step {
+  display: flex;
+  gap: 10px;
+  padding: 8px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.step-number {
+  background-color: #00ff00;
+  color: #0f2027;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.step-details {
+  flex: 1;
+}
+
+.step-instruction {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+}
+
+.step-meta {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* Route Popup */
+.route-popup h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+.route-popup p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+/* Route Markers */
+.route-marker-start,
+.route-marker-end {
+  background: transparent;
+  border: none;
+}
+
+.marker-pin {
+  font-size: 30px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Evacuation Point Markers */
+.evacuation-point {
+  background: transparent;
+  border: none;
+}
+
+.evac-marker {
+  font-size: 40px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Evacuation Popup */
+.evacuation-popup h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+.evacuation-popup button {
+  background-color: #00ff00;
+  color: #0f2027;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.evacuation-popup button:hover {
+  background-color: #00cc00;
+}
+
+/* Danger Zone Popup */
+.danger-zone-popup h3 {
+  margin: 0 0 10px 0;
+  color: #ff0000;
+  font-size: 16px;
+}
+
+.danger-zone-popup p {
+  margin: 5px 0;
+}
+
+/* Routing Control Buttons */
+.routing-control {
+  background: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.routing-button {
+  background-color: rgba(15, 32, 39, 0.95);
+  color: rgb(228, 238, 226);
+  border: 2px solid #00ff00;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.routing-button:hover {
+  background-color: rgba(0, 255, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 255, 0, 0.3);
+}
+
+.routing-button.active {
+  background-color: #00ff00;
+  color: #0f2027;
+  border-color: #00ff00;
+}
+
+.routing-button.clear-button {
+  border-color: #ff6600;
+}
+
+.routing-button.clear-button:hover {
+  background-color: rgba(255, 102, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
+}
