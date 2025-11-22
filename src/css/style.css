@@ -50,3 +50,89 @@ html {
   font-size: 14px;
   opacity: 0.8;
 }
+
+/* Info Icon Container */
+.info-icon-container {
+  position: relative;
+}
+
+/* Info Icon Button */
+.info-icon {
+  background-color: rgba(15, 32, 39, 0.9);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(58, 56, 56, 0.2);
+  transition: all 0.3s ease;
+}
+
+.info-icon:hover {
+  background-color: rgba(15, 32, 39, 1);
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(58, 56, 56, 0.4);
+}
+
+.info-symbol {
+  font-size: 24px;
+  font-style: normal;
+}
+
+/* Legend Tooltip */
+.legend-tooltip {
+  position: absolute;
+  bottom: 50px;
+  right: 0;
+  background-color: rgba(15, 32, 39, 0.95);
+  line-height: 25px;
+  color: rgb(228, 238, 226);
+  width: 200px;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 1000;
+}
+
+.legend-tooltip.hidden {
+  display: none;
+}
+
+.legend-tooltip h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  font-weight: bold;
+  border-bottom: 1px solid rgba(228, 238, 226, 0.3);
+  padding-bottom: 5px;
+}
+
+.legend-tooltip i {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.9;
+  border-radius: 50%;
+}
+
+/* Solid circles for earthquake severity */
+.legend-tooltip i.severity-solid {
+  background: var(--severity-color);
+  border: none;
+  opacity: 0.75;
+}
+
+/* Rings for alert levels */
+.legend-tooltip i.alert-ring {
+  border: 3px solid;
+  background: transparent !important;
+  border-color: var(--alert-color);
+}
+
+.legend-tooltip span {
+  display: inline-block;
+  line-height: 18px;
+}

@@ -43,14 +43,39 @@ VITE_MAPBOX_API_KEY=your_key_here
 ## File Structure
 
 ```
-├── .env                   # API keys (not committed)
-├── .env.example           # Template for environment variables
+├── .env                          # API keys (not committed)
+├── .env.example                  # Template for environment variables
 ├── src/
-|   └── config/
-│       └── config.js      # Imports API key from .env
+│   ├── config/
+│   │   └── config.js             # Imports API key from .env
 │   ├── css/
-│   │   └── style.css
-│   └── js/
-│       └── tracker.js       # Main application tracker
-└── index.html             # Entry point
+│   │   └── style.css             # Application styles
+│   ├── js/
+│   │   └── tracker.js            # Main application orchestrator
+│   ├── services/
+│   │   ├── EarthquakeService.js  # USGS earthquake data fetching
+│   │   ├── WeatherService.js     # Weather alerts data fetching
+│   │   └── MapService.js         # Leaflet map initialization & base layers
+│   └── utils/
+│       ├── earthquakeHelpers.js  # Earthquake styling & popup logic
+│       ├── weatherHelpers.js     # Weather alert styling & popup logic
+│       ├── layerFactory.js       # GeoJSON layer creation
+│       └── mapControls.js        # Legend & title controls
+└── index.html                    # Entry point
 ```
+
+## Architecture
+
+### Services Layer
+- **EarthquakeService**: Fetches real-time earthquake data from USGS API
+- **WeatherService**: Fetches active weather alerts
+- **MapService**: Handles Leaflet map initialization, base layer creation, and configuration
+
+### Utils Layer
+- **earthquakeHelpers.js**: Earthquake-specific styling, colors, popups, and marker sizing
+- **weatherHelpers.js**: Weather alert styling and popup formatting
+- **layerFactory.js**: Creates GeoJSON layers for earthquakes, tsunamis, and weather alerts
+- **mapControls.js**: Reusable map UI controls (legend, title banner, toggle logic)
+
+### Main Application
+- **tracker.js**: Orchestrates data loading, layer creation, and map setup
